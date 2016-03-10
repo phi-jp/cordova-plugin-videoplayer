@@ -13,11 +13,12 @@
         [self.playerView removeFromSuperview];
         self.player = nil;
         self.playerView = nil;
+        self.callbackId = nil;
     }
 
     NSString* urlString = [command.arguments objectAtIndex:0];
     NSArray* rect = [command.arguments objectAtIndex:1];
-    
+    self.callbackId = command.callbackId;
     
     // url
     NSURL *url = [NSURL URLWithString:urlString];
@@ -32,12 +33,17 @@
         CGFloat h = [rect[3] intValue];
         frame = CGRectMake(x, y, w, h);
     }
-    else {
-        
-    }
+    
+    // item
+    AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithURL:url];
 
     // player
-    self.player = [[AVPlayer alloc] initWithURL:url];
+    self.player = [[AVPlayer alloc] initWithPlayerItem:playerItem];
+    
+    [NSNotificationCenter.defaultCenter addObserver:self
+                                           selector:@selector(handleEndPlay:)
+                                               name:AVPlayerItemDidPlayToEndTimeNotification
+                                             object:playerItem];
     
     // view
     self.playerView = [[AVPlayerView alloc] initWithFrame:frame];
@@ -77,5 +83,14 @@
     
     [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
+
+-(void)handleEndPlay:(NSNotificationCenter*)center {
+    CDVPluginResult* pr = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"moviefinish"];
+    [pr setKeepCallbackAsBool:YES];
+    [self.commandDelegate sendPluginResult:pr callbackId:self.callbackId];
+    
+    NSLog(@"finish!");
+}
+
 
 @end
