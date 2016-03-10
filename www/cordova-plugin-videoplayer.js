@@ -14,4 +14,7 @@ module.exports = {
   resume: function(url) {
     exec(null, null, "VideoPlayerPlugin", "resume", [url]);
   },
+  destory: function(url) {
+    exec(null, null, "VideoPlayerPlugin", "destory", [url]);
+  },
 };

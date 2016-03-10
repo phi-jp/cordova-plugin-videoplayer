@@ -68,6 +68,18 @@
     }
 }
 
+- (void)destory:(CDVInvokedUrlCommand *)command {
+    if (self.player) {
+        [self.player pause];
+        [self.playerView removeFromSuperview];
+        self.player = nil;
+        self.playerView = nil;
+        self.callbackId = nil;
+    }
+}
+
+
+
 
 // `status`の値を監視して、再生可能になったら再生
 - (void)observeValueForKeyPath:(NSString *)keyPath
