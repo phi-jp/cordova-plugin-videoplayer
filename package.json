@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-videoplayer",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "cordova-plugin-videoplayer",
   "main": "index.js",
   "scripts": {
