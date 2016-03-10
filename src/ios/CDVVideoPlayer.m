@@ -16,14 +16,31 @@
     }
 
     NSString* urlString = [command.arguments objectAtIndex:0];
+    NSArray* rect = [command.arguments objectAtIndex:1];
+    
+    
+    // url
     NSURL *url = [NSURL URLWithString:urlString];
     
+    // frame
+    CGRect frame =  self.viewController.view.frame;
+    
+    if (rect != (id)[NSNull null]) {
+        CGFloat x = [rect[0] intValue];
+        CGFloat y = [rect[1] intValue];
+        CGFloat w = [rect[2] intValue];
+        CGFloat h = [rect[3] intValue];
+        frame = CGRectMake(x, y, w, h);
+    }
+    else {
+        
+    }
+
     // player
     self.player = [[AVPlayer alloc] initWithURL:url];
-
     
     // view
-    self.playerView = [[AVPlayerView alloc] initWithFrame:self.viewController.view.frame];
+    self.playerView = [[AVPlayerView alloc] initWithFrame:frame];
     [(AVPlayerLayer*)self.playerView.layer setPlayer:self.player];
     
     // show
