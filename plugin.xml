@@ -5,23 +5,6 @@
     <clobbers target="videoplayer" />
   </js-module>
 
-  <!-- android -->
-  <platform name="android">
-    <config-file target="res/xml/config.xml" parent="/*">
-      <feature name="VideoPlayerPlugin">
-        <param name="android-package" value="jp.phi.cordova.plugin.videoplayer.VideoPlayerPlugin"/>
-      </feature>
-    </config-file>
-
-    <config-file target="AndroidManifest.xml" parent="/*">
-      <uses-permission android:name="android.permission.INTERNET" />
-      <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-      <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />     
-    </config-file>
-
-    <source-file src="src/android/VideoPlayerPlugin.java" target-dir="src/jp/phi/cordova/plugin/videoplayer" />
-  </platform>
-
   <!-- ios -->
   <platform name="ios">
     <config-file target="config.xml" parent="/*">
