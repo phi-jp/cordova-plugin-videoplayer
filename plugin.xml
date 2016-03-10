@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="cordova-plugin-videoplayer" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+  <name>cordova-plugin-videoplayer</name>
+  <js-module name="videoplayer" src="www/cordova-plugin-videoplayer.js">
+    <clobbers target="videoplayer" />
+  </js-module>
+
+  <!-- android -->
+  <platform name="android">
+    <config-file target="res/xml/config.xml" parent="/*">
+      <feature name="VideoPlayerPlugin">
+        <param name="android-package" value="jp.phi.cordova.plugin.videoplayer.VideoPlayerPlugin"/>
+      </feature>
+    </config-file>
+
+    <config-file target="AndroidManifest.xml" parent="/*">
+      <uses-permission android:name="android.permission.INTERNET" />
+      <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+      <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />     
+    </config-file>
+
+    <source-file src="src/android/VideoPlayerPlugin.java" target-dir="src/jp/phi/cordova/plugin/videoplayer" />
+  </platform>
+
+  <!-- ios -->
+  <platform name="ios">
+    <config-file target="config.xml" parent="/*">
+      <feature name="VideoPlayerPlugin">
+        <param name="ios-package" value="CDVVideoPlayer"/>
+      </feature>
+    </config-file>
+
+    <header-file src="src/ios/CDVVideoPlayer.h" />
+    <source-file src="src/ios/CDVVideoPlayer.m" />
+  </platform>
+</plugin>

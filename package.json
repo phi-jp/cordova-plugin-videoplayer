@@ -1,0 +1,20 @@
+{
+  "name": "cordova-plugin-videoplayer",
+  "version": "0.0.1",
+  "description": "cordova-plugin-videoplayer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phi-jp/cordova-plugin-videoplayer.git"
+  },
+  "author": "phi",
+  "keywords": "cordova",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/phi-jp/cordova-plugin-videoplayer/issues"
+  },
+  "homepage": "https://github.com/phi-jp/cordova-plugin-videoplayer#readme"
+}
