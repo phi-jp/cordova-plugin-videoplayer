@@ -9,7 +9,6 @@
   <platform name="android">
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="VideoPlayerPlugin">
-        <param name="ios-package" value="CDVVideoPlayer"/>
         <param name="android-package" value="jp.phi.cordova.plugin.videoplayer.VideoPlayerPlugin"/>
       </feature>
     </config-file>

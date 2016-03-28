@@ -16,5 +16,5 @@ videoplayer.show(url, {
 
 ```
 $ cd test
-$ ordova plugin add --link ../
+$ cordova plugin add --link ../
 ```
