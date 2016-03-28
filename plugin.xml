@@ -5,6 +5,18 @@
     <clobbers target="videoplayer" />
   </js-module>
 
+  <!-- android -->
+  <platform name="android">
+    <config-file target="res/xml/config.xml" parent="/*">
+      <feature name="VideoPlayerPlugin">
+        <param name="ios-package" value="CDVVideoPlayer"/>
+        <param name="android-package" value="jp.phi.cordova.plugin.videoplayer.VideoPlayerPlugin"/>
+      </feature>
+    </config-file>
+
+    <source-file src="src/android/VideoPlayerPlugin.java" target-dir="src/jp/phi/cordova/plugin/videoplayer" />
+  </platform>
+
   <!-- ios -->
   <platform name="ios">
     <config-file target="config.xml" parent="/*">

@@ -11,3 +11,10 @@ videoplayer.show(url, {
   },
 });
 ```
+
+## test
+
+```
+$ cd test
+$ ordova plugin add --link ../
+```
