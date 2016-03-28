@@ -11,6 +11,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.net.Uri;
+import android.util.Log;
+
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnDismissListener;
@@ -29,8 +33,9 @@ import android.widget.LinearLayout;
 import android.widget.VideoView;
 
 public class VideoPlayerPlugin extends CordovaPlugin implements OnCompletionListener, OnPreparedListener, OnErrorListener, OnDismissListener {
-  private CallbackContext callbackContext;
+  private CallbackContext callbackContext = null;
 
+  private Dialog dialog;
   private VideoView videoView;
   private MediaPlayer player;
 
@@ -39,11 +44,32 @@ public class VideoPlayerPlugin extends CordovaPlugin implements OnCompletionList
   }
 
 
+  @Override
+  public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+    if (action.equals("show")) {
+      show(action, args, callbackContext);
+      return true;
+    } else if (action.equals("destroy")){
+      // showAds(action, args, callbackContext);
+      return true;
+    }
+
+    // method not found
+    return false;
+  }
+
   private void show(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
     final String urlString = args.getString(0);
     String path = urlString;
 
     this.callbackContext = callbackContext;
+
+    // dialog
+    dialog = new Dialog(cordova.getActivity(), android.R.style.Theme_NoTitleBar);
+    dialog.getWindow().getAttributes().windowAnimations = android.R.style.Animation_Dialog;
+    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+    dialog.setCancelable(true);
+    dialog.setOnDismissListener(this);
 
     // Main container layout
     LinearLayout main = new LinearLayout(cordova.getActivity());
@@ -54,6 +80,9 @@ public class VideoPlayerPlugin extends CordovaPlugin implements OnCompletionList
 
     videoView = new VideoView(cordova.getActivity());
     videoView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+//    videoView.setVideoPath(path);
+    videoView.setVideoURI(Uri.parse(path));
+    videoView.start();
     main.addView(videoView);
 
     player = new MediaPlayer();
@@ -61,11 +90,48 @@ public class VideoPlayerPlugin extends CordovaPlugin implements OnCompletionList
     player.setOnCompletionListener(this);
     player.setOnErrorListener(this);
 
+
     try {
       player.setDataSource(path);
     } catch(Exception e) {
       return ;
     }
+
+    final SurfaceHolder mHolder = videoView.getHolder();
+    mHolder.setKeepScreenOn(true);
+    mHolder.addCallback(new SurfaceHolder.Callback() {
+      @Override
+      public void surfaceCreated(SurfaceHolder holder) {
+        player.setDisplay(holder);
+        try {
+          player.prepare();
+        } catch (Exception e) {
+          PluginResult result = new PluginResult(PluginResult.Status.ERROR, e.getLocalizedMessage());
+          result.setKeepCallback(false); // release status callback in JS side
+//          callbackContext.sendPluginResult(result);
+//          callbackContext = null;
+        }
+      }
+
+      @Override
+      public void surfaceDestroyed(SurfaceHolder holder) {
+        player.release();
+      }
+
+      @Override
+      public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+      }
+    });
+
+    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+    lp.copyFrom(dialog.getWindow().getAttributes());
+    lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+    lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+
+    dialog.setContentView(main);
+    dialog.show();
+    dialog.getWindow().setAttributes(lp);
+//    cordova.getActivity().setContentView(main);
   }
 
 
@@ -82,14 +148,14 @@ public class VideoPlayerPlugin extends CordovaPlugin implements OnCompletionList
 
   @Override
   public void onPrepared(MediaPlayer mp) {
-    // mp.start();
+     mp.start();
   }
 
   @Override
   public void onCompletion(MediaPlayer mp) {
-    // Log.d(LOG_TAG, "MediaPlayer completed");
-    // mp.release();
-    // dialog.dismiss();
+//     Log.d("MediaPlayer completed");
+     mp.release();
+     dialog.dismiss();
   }
 
   @Override
