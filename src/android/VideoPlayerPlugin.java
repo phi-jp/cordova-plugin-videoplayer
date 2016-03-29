@@ -76,7 +76,6 @@ public class VideoPlayerPlugin extends CordovaPlugin {
     // dialog
     dialog = new Dialog(cordova.getActivity(), android.R.style.Theme_NoTitleBar);
     dialog.getWindow().getAttributes().windowAnimations = android.R.style.Animation_Dialog;
-//    dialog.setOnDismissListener(this);
 
     // Main container layout
     LinearLayout main = new LinearLayout(cordova.getActivity());
@@ -93,9 +92,11 @@ public class VideoPlayerPlugin extends CordovaPlugin {
 
     WindowManager wm = cordova.getActivity().getWindowManager();
     Display disp = wm.getDefaultDisplay();
+    int dispWidth = disp.getWidth();
+    int dispHeight = disp.getHeight();
     WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-    lp.x = x - disp.getWidth()/2;
-    lp.y = y - disp.getHeight()/2;
+    lp.x = x - dispWidth/2 + width/2;
+    lp.y = y - dispHeight/2 + height/2;
     lp.width = width;
     lp.height = height;
 
